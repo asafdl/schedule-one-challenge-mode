@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
 using UnityEngine;
 
-namespace MONO_IL2CPP_Template.TemplateUtils
+namespace challange_mode.TemplateUtils
 {
     public static class AssetBundleUtils
     {
