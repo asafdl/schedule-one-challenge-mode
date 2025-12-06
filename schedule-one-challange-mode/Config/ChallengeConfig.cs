@@ -22,6 +22,8 @@ namespace challange_mode
         public const float COUNTEROFFER_MIN_ENJOYMENT = 0.4f;
         public const float COUNTEROFFER_MEDIOCRE_THRESHOLD = 0.6f;
         public const float COUNTEROFFER_MAX_REJECT_CHANCE = 0.5f;
+        
+        public const float MIN_APPEAL_FOR_REQUEST = 0.6f;
 
         public static float GetSuccessMultiplier(float enjoyment)
         {

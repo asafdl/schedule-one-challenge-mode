@@ -931,9 +931,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Core.cs" />
-		<Compile Include="Patches\CustomerPatches.cs" />
-		<Compile Include="Patches\HandoverUIPatches.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Config\ChallengeConfig.cs" />
+    <Compile Include="Patches\CustomerPatches.cs" />
+    <Compile Include="Patches\HandoverUIPatches.cs" />
 		<Compile Include="TemplateUtils\AssetBundleUtils.cs" />
 		<Folder Include="Libs\" />
 		<Folder Include="Assets\" />

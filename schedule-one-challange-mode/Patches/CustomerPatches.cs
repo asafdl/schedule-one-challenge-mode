@@ -2,6 +2,7 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using challange_mode;
 
 #if MONO
 using ScheduleOne.Economy;
@@ -11,36 +12,6 @@ using ScheduleOne.Product;
 
 namespace challange_mode.Patches
 {
-    /// <summary>
-    /// Configuration constants for Challenge Mode difficulty settings
-    /// </summary>
-    public static class ChallengeConfig
-    {
-        public const float DRUG_AFFINITY_MAX_IMPACT = 0.3f;
-        
-        public const float EFFECT_MATCH_NONE = -0.35f;
-        public const float EFFECT_MATCH_ONE = 0.0f;
-        public const float EFFECT_MATCH_TWO = 0.15f;
-        public const float EFFECT_MATCH_THREE = 0.25f;
-        
-        public const float ENJOYMENT_CRITICAL_LOW = 0.25f;
-        public const float ENJOYMENT_LOW = 0.45f;
-        public const float ENJOYMENT_MEDIUM = 0.65f;
-        
-        public const float MULTIPLIER_CRITICAL_LOW = 0.1f;
-        public const float MULTIPLIER_LOW = 0.3f;
-        public const float MULTIPLIER_MEDIUM = 0.6f;
-        public const float MULTIPLIER_HIGH = 1.0f;
-        
-        public const float COUNTEROFFER_PRICE_LIMIT_MULTIPLIER = 2.0f;
-        public const float COUNTEROFFER_MIN_ENJOYMENT = 0.4f;
-        public const float COUNTEROFFER_MEDIOCRE_THRESHOLD = 0.6f;
-        public const float COUNTEROFFER_MAX_REJECT_CHANCE = 0.5f;
-    }
-
-    /// <summary>
-    /// Helper utilities for customer behavior calculations
-    /// </summary>
     public static class CustomerBehaviorHelpers
     {
         /// <summary>
@@ -159,6 +130,23 @@ namespace challange_mode.Patches
             float multiplier = ChallengeConfig.GetSuccessMultiplier(avgEnjoyment);
 
             __result *= multiplier;
+        }
+    }
+
+    /// <summary>
+    /// Prevents customers from requesting products they don't love
+    /// </summary>
+    [HarmonyPatch(typeof(Customer), "GetWeightedRandomProduct")]
+    public class GetWeightedRandomProduct_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ref ProductDefinition __result, ref float appeal)
+        {
+            if (__result != null && appeal < ChallengeConfig.MIN_APPEAL_FOR_REQUEST)
+            {
+                __result = null;
+                appeal = 0f;
+            }
         }
     }
 
