@@ -2,6 +2,13 @@
 
 A difficulty mod for Schedule I that makes customers significantly more selective about their purchases based on drug type preferences and product properties.
 
+
+This mod significantly increases difficulty by:
+- Making it nearly impossible to sell products customers don't want
+- Requiring you to stock diverse drug types to satisfy different customers
+- Forcing strategic product matching based on customer preferences
+- Making counter-offers much harder to negotiate
+
 ## Features
 
 ### 1. Enhanced Product Enjoyment System
@@ -146,16 +153,6 @@ Common locations:
 - Steam (default): `C:\Program Files (x86)\Steam\steamapps\common\Schedule I`
 - Steam (custom): Check Steam → Right-click Schedule I → Properties → Local Files → Browse
 
-## Gameplay Impact
-
-This mod significantly increases difficulty by:
-- Making it nearly impossible to sell products customers don't want
-- Requiring you to stock diverse drug types to satisfy different customers
-- Forcing strategic product matching based on customer preferences
-- Making counter-offers much harder to negotiate
-
-**Recommendation**: Check customer drug affinities in the handover screen before stocking products!
-
 ## Technical Details
 
 ### Patched Methods
@@ -278,21 +275,6 @@ MelonLogger.Error("Error message");
 - [ ] Counter-offers evaluate correctly
 - [ ] UI displays affinity information
 - [ ] No console errors on game start
-
-## Contributors
-
-- **asafdl** - Initial development and project creator
-
-Want to be listed? Make a meaningful contribution and submit a PR!
-
-## Credits
-
-Created for enhanced Schedule I gameplay challenge.
-
-Special thanks to:
-- Schedule I developers for creating a moddable game
-- MelonLoader team for the modding framework
-- Harmony library for runtime patching capabilities
 
 ## License
 
