@@ -39,9 +39,9 @@ Customer handover screens now show their drug type preferences:
 - **MelonLoader** - Must be installed in your game directory ([Installation Guide](https://melonwiki.xyz/#/?id=automated-installation))
 - **.NET SDK 6.0+** - Required only for building from source ([Download](https://dotnet.microsoft.com/download))
 
-### Option 1: Install Pre-built Release
+### Option 1: Install Pre-built
 
-1. Download the latest `challange_mode.dll` from the [Releases](https://github.com/asafdl/schedule-one-challange-mode/releases) page
+1. Download the latest `challange_mode.dll` from the [`dist/`](https://github.com/asafdl/schedule-one-challange-mode/tree/master/dist) folder
 2. Navigate to your Schedule I installation directory
 3. Place the DLL in the `Mods` folder:
    ```
@@ -199,6 +199,23 @@ Implement harsher consequences for:
 
 ### 5. Dynamic Customer Preferences
 Make customer affinities and preferences change over time to prevent the game from becoming stale. Customers will gradually shift their drug type preferences and desired effects, requiring players to adapt their product offerings continuously.
+
+## Release Process (for maintainers)
+
+1. Make changes and test thoroughly
+2. Run the build script:
+   ```bash
+   ./build.sh
+   ```
+3. The script will build and copy the DLL to `dist/`
+4. Commit and push:
+   ```bash
+   git add dist/challange_mode.dll
+   git commit -m "Release: version description"
+   git push origin master
+   ```
+
+Users can always download the latest build from the `dist/` folder.
 
 ## Contributing
 

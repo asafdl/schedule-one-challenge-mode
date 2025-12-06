@@ -1,8 +1,10 @@
 # Build outputs
 bin/
 obj/
-*.dll
 *.pdb
+
+# Except dist folder
+!dist/*.dll
 
 # User-specific files
 *.user
