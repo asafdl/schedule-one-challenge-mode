@@ -108,22 +108,6 @@ namespace challange_mode.Patches
             return productCount > 0 ? totalEnjoyment / productCount : 0f;
         }
 
-        /// <summary>
-        /// Gets success chance multiplier based on enjoyment level
-        /// </summary>
-        public static float GetSuccessMultiplier(float enjoyment)
-        {
-            if (enjoyment < ChallengeConfig.ENJOYMENT_CRITICAL_LOW)
-                return ChallengeConfig.MULTIPLIER_CRITICAL_LOW;
-            
-            if (enjoyment < ChallengeConfig.ENJOYMENT_LOW)
-                return ChallengeConfig.MULTIPLIER_LOW;
-            
-            if (enjoyment < ChallengeConfig.ENJOYMENT_MEDIUM)
-                return ChallengeConfig.MULTIPLIER_MEDIUM;
-            
-            return ChallengeConfig.MULTIPLIER_HIGH;
-        }
 
         /// <summary>
         /// Calculates average order spend for a customer
