@@ -25,6 +25,12 @@ namespace challange_mode
         
         public const float MIN_APPEAL_FOR_REQUEST = 0.6f;
 
+        // Product Request Message Settings
+        public const int MESSAGE_COOLDOWN_DAYS = 3;
+        public const int MIN_FAILED_REQUESTS_BEFORE_MESSAGE = 2;
+        public const float MIN_APPEAL_THRESHOLD_FOR_TRACKING = 0.4f;
+        public const bool ENABLE_PRODUCT_REQUEST_MESSAGES = true;
+
         public static float GetSuccessMultiplier(float enjoyment)
         {
             if (enjoyment < ENJOYMENT_CRITICAL_LOW)

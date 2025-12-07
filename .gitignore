@@ -29,3 +29,6 @@ Thumbs.db
 
 # Cursor
 .cursor/
+
+# original game files
+decompiled/
