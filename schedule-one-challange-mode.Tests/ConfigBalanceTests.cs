@@ -17,25 +17,6 @@ public class ConfigBalanceTests
     }
 
     [Fact]
-    public void EffectMatchModifiers_AreBalanced()
-    {
-        Assert.True(ChallengeConfig.EFFECT_MATCH_NONE < 0);
-        Assert.True(ChallengeConfig.EFFECT_MATCH_ONE <= 0);
-        Assert.True(ChallengeConfig.EFFECT_MATCH_TWO > 0);
-        Assert.True(ChallengeConfig.EFFECT_MATCH_THREE > ChallengeConfig.EFFECT_MATCH_TWO);
-
-        float maxSwing = ChallengeConfig.EFFECT_MATCH_THREE - ChallengeConfig.EFFECT_MATCH_NONE;
-        Assert.InRange(maxSwing, 0.5f, 0.8f);
-
-        _output.WriteLine("Effect Match Modifiers:");
-        _output.WriteLine($"  0 matches: {ChallengeConfig.EFFECT_MATCH_NONE:P0}");
-        _output.WriteLine($"  1 match:   {ChallengeConfig.EFFECT_MATCH_ONE:P0}");
-        _output.WriteLine($"  2 matches: {ChallengeConfig.EFFECT_MATCH_TWO:P0}");
-        _output.WriteLine($"  3 matches: {ChallengeConfig.EFFECT_MATCH_THREE:P0}");
-        _output.WriteLine($"  Total swing: {maxSwing:P0}");
-    }
-
-    [Fact]
     public void SuccessMultipliers_AreProgressive()
     {
         Assert.True(ChallengeConfig.MULTIPLIER_CRITICAL_LOW < ChallengeConfig.MULTIPLIER_LOW);

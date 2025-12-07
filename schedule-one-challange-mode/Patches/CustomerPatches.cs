@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using challange_mode;
+using MelonLoader;
 
 #if MONO
 using ScheduleOne.Economy;
@@ -100,22 +101,28 @@ namespace challange_mode.Patches
     public class GetProductEnjoyment_Patch
     {
         [HarmonyPostfix]
-        public static void Postfix(Customer __instance, ProductDefinition product, ref float __result)
+        public static void Postfix(Customer __instance, ProductDefinition product, EQuality quality, ref float __result)
         {
             var customerData = __instance.CustomerData;
             if (customerData == null)
                 return;
 
+            float originalResult = __result;
             float drugTypeBonus = CustomerBehaviorHelpers.CalculateDrugAffinityBonus(customerData, product.DrugType);
             float effectBonus = CustomerBehaviorHelpers.CalculateEffectMatchBonus(customerData, product);
 
             __result += drugTypeBonus + effectBonus;
             __result = Mathf.Clamp01(__result);
+
+            MelonLogger.Msg($"[Enjoyment] {__instance.NPC.fullName} → {product.Name} ({quality}): " +
+                           $"Base={originalResult:F3}, Drug={drugTypeBonus:+0.000;-0.000;+0.000}, " +
+                           $"Effects={effectBonus:+0.000;-0.000;+0.000}, Final={__result:F3}");
         }
     }
 
     /// <summary>
     /// Applies harsh penalties to success chance based on product enjoyment
+    /// Also scales difficulty by customer quality standards (early game more forgiving)
     /// </summary>
     [HarmonyPatch(typeof(Customer), nameof(Customer.GetOfferSuccessChance))]
     public class GetOfferSuccessChance_Patch
@@ -127,9 +134,10 @@ namespace challange_mode.Patches
                 return;
 
             float avgEnjoyment = CustomerBehaviorHelpers.CalculateAverageEnjoyment(__instance, items);
-            float multiplier = ChallengeConfig.GetSuccessMultiplier(avgEnjoyment);
+            float enjoymentMultiplier = ChallengeConfig.GetSuccessMultiplier(avgEnjoyment);
+            float standardsMultiplier = ChallengeConfig.GetStandardsMultiplier((int)__instance.CustomerData.Standards);
 
-            __result *= multiplier;
+            __result *= enjoymentMultiplier * standardsMultiplier;
         }
     }
 
