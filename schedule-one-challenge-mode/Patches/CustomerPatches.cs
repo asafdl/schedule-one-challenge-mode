@@ -104,10 +104,10 @@ namespace challenge_mode.Patches
                 return;
 
             float avgEnjoyment = CustomerBehaviorHelpers.CalculateAverageEnjoyment(__instance, items);
-            float enjoymentMultiplier = ChallengeConfig.GetSuccessMultiplier(avgEnjoyment);
-            float standardsMultiplier = ChallengeConfig.GetStandardsMultiplier((int)__instance.CustomerData.Standards);
+            float difficultyMultiplier = ChallengeConfig.GetSuccessMultiplier(avgEnjoyment);
+            float standardsPenalty = ChallengeConfig.GetStandardsPenalty((int)__instance.CustomerData.Standards);
 
-            __result *= enjoymentMultiplier * standardsMultiplier;
+            __result *= difficultyMultiplier * standardsPenalty;
         }
     }
 

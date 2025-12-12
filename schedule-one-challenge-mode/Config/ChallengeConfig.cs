@@ -9,14 +9,9 @@ namespace challenge_mode
         public const float EFFECT_MATCH_TWO = 0.25f;
         public const float EFFECT_MATCH_THREE = 0.45f;
         
-        public const float ENJOYMENT_CRITICAL_LOW = 0.20f;
-        public const float ENJOYMENT_LOW = 0.35f;
-        public const float ENJOYMENT_MEDIUM = 0.55f;
-        
-        public const float MULTIPLIER_CRITICAL_LOW = 0.3f;
-        public const float MULTIPLIER_LOW = 0.5f;
-        public const float MULTIPLIER_MEDIUM = 0.75f;
-        public const float MULTIPLIER_HIGH = 1.0f;
+        // Difficulty scaling - continuous function instead of buckets
+        public const float DIFFICULTY_SCALE = 1.25f;        // Scale factor (1.2 means 0.83+ enjoyment = no penalty)
+        public const float DIFFICULTY_MIN = 0.1f;          // Minimum multiplier (never impossible)
         
         public const float COUNTEROFFER_MIN_ENJOYMENT = 0.4f;
         public const float COUNTEROFFER_MEDIOCRE_THRESHOLD = 0.6f;
@@ -31,27 +26,20 @@ namespace challenge_mode
 
         public static float GetSuccessMultiplier(float enjoyment)
         {
-            if (enjoyment < ENJOYMENT_CRITICAL_LOW)
-                return MULTIPLIER_CRITICAL_LOW;
-            
-            if (enjoyment < ENJOYMENT_LOW)
-                return MULTIPLIER_LOW;
-            
-            if (enjoyment < ENJOYMENT_MEDIUM)
-                return MULTIPLIER_MEDIUM;
-            
-            return MULTIPLIER_HIGH;
+            // Continuous scaling: scale enjoyment by constant, clamp to [min, 1.0]
+            float multiplier = enjoyment * DIFFICULTY_SCALE;
+            return multiplier;
         }
 
-        public static float GetStandardsMultiplier(int standardsValue)
+        public static float GetStandardsPenalty(int standards)
         {
-            return standardsValue switch
+            return standards switch
             {
-                0 => 1.3f,
-                1 => 1.15f,
-                2 => 1.0f,
-                3 => 0.85f,
-                4 => 0.7f,
+                0 => 1.0f,   // VeryLow - no penalty
+                1 => 0.95f,  // Low - minimal penalty
+                2 => 0.9f,   // Moderate - minor penalty
+                3 => 0.8f,   // High - moderate penalty
+                4 => 0.7f,   // VeryHigh - significant penalty
                 _ => 1.0f
             };
         }

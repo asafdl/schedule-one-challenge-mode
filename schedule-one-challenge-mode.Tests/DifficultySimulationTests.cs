@@ -21,51 +21,72 @@ public class DifficultySimulationTests
     [Fact]
     public void Simulate_RealCustomerScenarios()
     {
-        _output.WriteLine("=== CHALLENGE MODE DIFFICULTY SIMULATION ===");
-        _output.WriteLine("Using actual customer data from Schedule I base game\n");
+        _output.WriteLine("=== CHALLENGE MODE DIFFICULTY SIMULATION ===\n");
 
-        // Austin Steiner - Real data from DefaultSave (MODERATE standards - typical early game)
+        // Test each difficulty multiplier bracket
+        // Enjoyment thresholds: <0.20 (0.3×), 0.20-0.35 (0.5×), 0.35-0.55 (0.75×), >=0.55 (1.0×)
+        
+        _output.WriteLine("=== ENJOYMENT: HIGH (>0.55) - No difficulty penalty ===");
+        _output.WriteLine("Neutral affinity (0.0), 1 effect match → enjoyment 0.60\n");
+        SimulateScenario("VeryLow (0)", 0.0f, 1, 1.0f);
+        SimulateScenario("Moderate (2)", 0.0f, 1, 0.9f);
+        SimulateScenario("VeryHigh (4)", 0.0f, 1, 0.7f);
+
+        _output.WriteLine("\n=== ENJOYMENT: MEDIUM (0.35-0.55) - 0.75× difficulty penalty ===");
+        _output.WriteLine("Neutral affinity (0.0), 0 effect matches → enjoyment 0.50\n");
+        SimulateScenario("VeryLow (0)", 0.0f, 0, 1.0f);
+        SimulateScenario("Moderate (2)", 0.0f, 0, 0.9f);
+        SimulateScenario("VeryHigh (4)", 0.0f, 0, 0.7f);
+
+        _output.WriteLine("\n=== ENJOYMENT: LOW (0.20-0.35) - 0.5× difficulty penalty ===");
+        _output.WriteLine("Strong dislike (-0.8 affinity), 0 effect matches → enjoyment 0.26\n");
+        SimulateScenario("VeryLow (0)", -0.8f, 0, 1.0f);
+        SimulateScenario("Moderate (2)", -0.8f, 0, 0.9f);
+        SimulateScenario("VeryHigh (4)", -0.8f, 0, 0.7f);
+
+        _output.WriteLine("\n=== ENJOYMENT: CRITICAL LOW (<0.20) - 0.3× difficulty penalty ===");
+        _output.WriteLine("Hates drug (-1.0 affinity), 0 effect matches → enjoyment 0.20\n");
+        SimulateScenario("VeryLow (0)", -1.0f, 0, 1.0f);
+        SimulateScenario("Moderate (2)", -1.0f, 0, 0.9f);
+        SimulateScenario("VeryHigh (4)", -1.0f, 0, 0.7f);
+
+        // Real customer data from DefaultSave
+        _output.WriteLine("\n=== DEFAULT SAVE CUSTOMERS ===\n");
+
+        // Austin Steiner
         // ProductAffinities: [0.78 (Marijuana), -0.66 (Meth), 0.15 (Cocaine)]
-        _output.WriteLine("=== AUSTIN STEINER (Marijuana Lover, Meth Hater) - MODERATE Standards ===\n");
-        
-        SimulateScenario("Selling Marijuana + 3 effect matches", 0.78f, 3, 1.0f);
-        SimulateScenario("Selling Marijuana + 2 effect matches", 0.78f, 2, 1.0f);
-        SimulateScenario("Selling Marijuana + 1 effect match", 0.78f, 1, 1.0f);
-        SimulateScenario("Selling Marijuana + 0 effect matches", 0.78f, 0, 1.0f);
-        SimulateScenario("Selling Cocaine (neutral) + 3 effects", 0.15f, 3, 1.0f);
-        SimulateScenario("Selling Meth (hates it) + 3 effects", -0.66f, 3, 1.0f);
-        SimulateScenario("Selling Meth + 0 effects (worst case)", -0.66f, 0, 1.0f);
+        // Standards: Moderate (2)
+        _output.WriteLine("--- Austin Steiner (Marijuana Lover, Meth Hater) ---\n");
+        SimulateScenario("Selling Marijuana + 3 effect matches", 0.78f, 3, 0.9f);
+        SimulateScenario("Selling Marijuana + 2 effect matches", 0.78f, 2, 0.9f);
+        SimulateScenario("Selling Marijuana + 1 effect match", 0.78f, 1, 0.9f);
+        SimulateScenario("Selling Marijuana + 0 effect matches", 0.78f, 0, 0.9f);
+        SimulateScenario("Selling Cocaine (neutral) + 3 effects", 0.15f, 3, 0.9f);
+        SimulateScenario("Selling Meth (hates it) + 3 effects", -0.66f, 3, 0.9f);
+        SimulateScenario("Selling Meth + 0 effects (worst case)", -0.66f, 0, 0.9f);
 
-        // Show early game (LOW standards) - more forgiving
-        _output.WriteLine("\n=== EARLY GAME CUSTOMER (LOW Standards) - Same scenario ===\n");
-        SimulateScenario("Marijuana + 0 effects (early game)", 0.78f, 0, 1.25f);
-        
-        // Show late game (PREMIUM standards) - much stricter
-        _output.WriteLine("\n=== LATE GAME CUSTOMER (PREMIUM Standards) - Same scenario ===\n");
-        SimulateScenario("Marijuana + 0 effects (late game)", 0.78f, 0, 0.7f);
-
-        // Jessi Waters - Real data from DefaultSave
+        // Jessi Waters
         // ProductAffinities: [0.0 (Marijuana), 1.0 (Meth), -0.27 (Cocaine)]
-        _output.WriteLine("\n=== JESSI WATERS (Meth Enthusiast, Cocaine Dislike) - MODERATE Standards ===\n");
-        
-        SimulateScenario("Selling Meth + 3 effect matches", 1.0f, 3, 1.0f);
-        SimulateScenario("Selling Meth + 2 effect matches", 1.0f, 2, 1.0f);
-        SimulateScenario("Selling Meth + 1 effect match", 1.0f, 1, 1.0f);
-        SimulateScenario("Selling Marijuana (neutral) + 2 effects", 0.0f, 2, 1.0f);
-        SimulateScenario("Selling Cocaine (dislikes) + 3 effects", -0.27f, 3, 1.0f);
+        // Standards: Moderate (2)
+        _output.WriteLine("\n--- Jessi Waters (Meth Enthusiast, Cocaine Dislike) ---\n");
+        SimulateScenario("Selling Meth + 3 effect matches", 1.0f, 3, 0.9f);
+        SimulateScenario("Selling Meth + 2 effect matches", 1.0f, 2, 0.9f);
+        SimulateScenario("Selling Meth + 1 effect match", 1.0f, 1, 0.9f);
+        SimulateScenario("Selling Marijuana (neutral) + 2 effects", 0.0f, 2, 0.9f);
+        SimulateScenario("Selling Cocaine (dislikes) + 3 effects", -0.27f, 3, 0.9f);
 
-        // Kathy Henderson - Real data from DefaultSave
+        // Kathy Henderson
         // ProductAffinities: [0.55 (Marijuana), 0.27 (Meth), -0.61 (Cocaine)]
-        _output.WriteLine("\n=== KATHY HENDERSON (Balanced Preference, Cocaine Hater) - MODERATE Standards ===\n");
-        
-        SimulateScenario("Selling Marijuana (liked) + 3 effects", 0.55f, 3, 1.0f);
-        SimulateScenario("Selling Marijuana + 1 effect", 0.55f, 1, 1.0f);
-        SimulateScenario("Selling Meth (slight like) + 2 effects", 0.27f, 2, 1.0f);
-        SimulateScenario("Selling Cocaine (hates) + 3 effects", -0.61f, 3, 1.0f);
-        SimulateScenario("Selling Cocaine + 0 effects (worst)", -0.61f, 0, 1.0f);
+        // Standards: Moderate (2)
+        _output.WriteLine("\n--- Kathy Henderson (Balanced Preference, Cocaine Hater) ---\n");
+        SimulateScenario("Selling Marijuana (liked) + 3 effects", 0.55f, 3, 0.9f);
+        SimulateScenario("Selling Marijuana + 1 effect", 0.55f, 1, 0.9f);
+        SimulateScenario("Selling Meth (slight like) + 2 effects", 0.27f, 2, 0.9f);
+        SimulateScenario("Selling Cocaine (hates) + 3 effects", -0.61f, 3, 0.9f);
+        SimulateScenario("Selling Cocaine + 0 effects (worst)", -0.61f, 0, 0.9f);
     }
 
-    private void SimulateScenario(string scenario, float drugAffinity, int effectMatches, float standardsMultiplier = 1.0f)
+    private void SimulateScenario(string scenario, float drugAffinity, int effectMatches, float standardsPenalty = 1.0f)
     {
         float baseEnjoyment = 0.5f;
 
@@ -75,19 +96,14 @@ public class DifficultySimulationTests
         float finalEnjoyment = baseEnjoyment + drugBonus + effectBonus;
         finalEnjoyment = Math.Clamp(finalEnjoyment, 0f, 1f);
 
-        float enjoymentMultiplier = ChallengeConfig.GetSuccessMultiplier(finalEnjoyment);
-        float totalMultiplier = enjoymentMultiplier * standardsMultiplier;
-        
+        float difficultyMultiplier = ChallengeConfig.GetSuccessMultiplier(finalEnjoyment);
+        float totalMultiplier = difficultyMultiplier * standardsPenalty;
+
         float vanillaSuccess = 0.70f;
         float modifiedSuccess = vanillaSuccess * totalMultiplier;
 
-        string standardsNote = standardsMultiplier != 1.0f 
-            ? $" × {standardsMultiplier:P0} standards" 
-            : "";
-
         _output.WriteLine($"{scenario}:");
-        _output.WriteLine($"  Enjoyment: {baseEnjoyment:P0} + {drugBonus:+0.0%;-0.0%;0} drug + {effectBonus:+0.0%;-0.0%;0} effects = {finalEnjoyment:P0}");
-        _output.WriteLine($"  Success:   {vanillaSuccess:P0} → {modifiedSuccess:P0} ({enjoymentMultiplier:P0}{standardsNote} = {totalMultiplier:P0} total) - {GetDifficultyRating(modifiedSuccess)}");
+        _output.WriteLine($"  BASE: {vanillaSuccess:P0}  →  MOD: {modifiedSuccess:P0}");
         _output.WriteLine("");
     }
 
@@ -102,18 +118,6 @@ public class DifficultySimulationTests
         };
     }
 
-    private string GetDifficultyRating(float successRate)
-    {
-        return successRate switch
-        {
-            < 0.10f => "NEARLY IMPOSSIBLE",
-            < 0.30f => "EXTREMELY HARD",
-            < 0.50f => "HARD",
-            < 0.70f => "MEDIUM",
-            < 0.85f => "EASY",
-            _ => "VERY EASY"
-        };
-    }
 
 }
 
